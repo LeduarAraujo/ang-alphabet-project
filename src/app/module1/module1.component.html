@@ -1,17 +1,18 @@
 <div class="container main-container" [class.game-mode]="gameStarted">
   <h1 class="title">🎓 Aprenda as Letras</h1>
-  
+
   @if (!gameStarted) {
     <!-- Tela inicial -->
     <div class="status-text">
       <p>Clique no botão <strong>Iniciar</strong> para começar a jogar!</p>
       <small class="text-muted">📌 Dica: Use Chrome ou Edge para melhor reconhecimento de voz</small>
+      <p style="margin-top: 10px; margin-bottom: 0; color: #667eea; font-weight: 700;">🔊 Dica: Clique em qualquer letra para ouvir como ela é pronunciada!</p>
     </div>
 
     <div class="row g-3 mb-4">
       @for (letter of alphabet; track letter.id) {
         <div class="col-6 col-md-4 col-lg-3 col-xl-2">
-          <div 
+          <div
             class="card card-letter"
             [ngClass]="{
               'hidden': letter.state === 'hidden',
@@ -50,7 +51,7 @@
       </div>
 
       <div class="mic-container">
-        <button 
+        <button
           class="mic-button"
           [class.recording]="isRecording"
           (mousedown)="startRecording()"
@@ -83,7 +84,7 @@
     <div class="row g-3 mb-4">
       @for (letter of alphabet; track letter.id) {
         <div class="col-6 col-md-4 col-lg-3 col-xl-2 position-relative">
-          <div 
+          <div
             class="card card-letter"
             [ngClass]="{
               'hidden': letter.state === 'hidden',
