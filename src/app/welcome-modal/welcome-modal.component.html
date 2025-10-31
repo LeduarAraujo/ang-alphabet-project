@@ -1,0 +1,51 @@
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>🎉 Bem-vindo ao Alfabeto Interativo!</h2>
+        <button class="close-btn" (click)="closeModal()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="instruction-section">
+          <h3>🎤 Aprenda as Letras</h3>
+          <div class="instruction-text">
+            <p><strong>Como funciona:</strong></p>
+            <ol>
+              <li>Clique no botão <strong>Iniciar</strong></li>
+              <li>Aparecerá uma letra aleatória na tela</li>
+              <li><strong>Aperte e segure</strong> o botão do microfone 🎤</li>
+              <li><strong>Fale a letra!</strong> Para melhor reconhecimento, diga: <span class="highlight">"Letra [LETRA]"</span></li>
+              <li>Exemplo: <span class="highlight">"Letra N"</span></li>
+              <li>Solte o botão para validar</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="instruction-section">
+          <h3>🖼️ Aprenda com Imagens</h3>
+          <div class="instruction-text">
+            <p><strong>Como funciona:</strong></p>
+            <ol>
+              <li>Clique no botão <strong>Iniciar</strong></li>
+              <li>Aparecerá uma letra aleatória na tela</li>
+              <li>Escolha a imagem que começa com essa letra</li>
+              <li>Veja a palavra escrita abaixo da imagem correta</li>
+              <li>Continue até completar todo o alfabeto!</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="tips-section">
+          <p class="tip">💡 <strong>Dica:</strong> Use o menu superior para navegar entre os módulos!</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-start-modal" (click)="closeModal()">
+          Vamos começar! 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+}

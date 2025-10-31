@@ -5,8 +5,7 @@ import { Module2Component } from './module2/module2.component';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'module1',
-    pathMatch: 'full'
+    component: Module1Component
   },
   {
     path: 'module1',
