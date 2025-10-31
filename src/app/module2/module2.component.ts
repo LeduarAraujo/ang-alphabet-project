@@ -20,6 +20,7 @@ export class Module2Component implements OnInit {
   currentLetter: string | null = null;
   currentImageOptions: string[] = [];
   correctEmoji: string = '';
+  correctWord: string = '';
   feedback: 'none' | 'correct' | 'wrong' = 'none';
   showReveal = false;
   revealedLetter: string | null = null;
@@ -152,6 +153,7 @@ export class Module2Component implements OnInit {
       const allOptions = [...imageData.wrongOptions, imageData.correctEmoji];
       this.currentImageOptions = shuffleArray(allOptions);
       this.correctEmoji = imageData.correctEmoji;
+      this.correctWord = imageData.correctWord;
     }
   }
 

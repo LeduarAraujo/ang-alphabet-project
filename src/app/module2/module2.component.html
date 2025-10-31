@@ -63,8 +63,15 @@
           }
         </div>
         @if (feedback !== 'none') {
-          <div class="feedback-badge" [ngClass]="feedback">
-            {{ feedback === 'correct' ? '✓' : '✗' }}
+          <div class="feedback-container">
+            <div class="feedback-badge" [ngClass]="feedback">
+              {{ feedback === 'correct' ? '✓' : '✗' }}
+            </div>
+            @if (feedback === 'correct' && correctWord) {
+              <div class="correct-word-display">
+                {{ correctWord }}
+              </div>
+            }
           </div>
         }
       </div>

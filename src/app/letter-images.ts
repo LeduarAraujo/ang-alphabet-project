@@ -101,7 +101,7 @@ export const LETTER_IMAGES: { [key: string]: LetterImage } = {
     letter: 'P',
     correctWord: 'Pato',
     correctEmoji: '🦆',
-    wrongOptions: ['🍕', '💡']
+    wrongOptions: ['🥚', '💡']
   },
   'Q': {
     letter: 'Q',
