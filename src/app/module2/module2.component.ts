@@ -99,7 +99,7 @@ export class Module2Component implements OnInit {
 
   private showCorrectFeedback() {
     this.feedback = 'correct';
-    setTimeout(() => this.feedback = 'none', 1000);
+    // Não limpar o feedback após 3 segundos para mostrar a tela do parabéns
   }
 
   private showWrongFeedback() {
@@ -123,7 +123,8 @@ export class Module2Component implements OnInit {
       this.revealedLetter = this.currentLetter;
       this.currentLetter = null;
       this.showReveal = true;
-    }, 1000);
+      this.feedback = 'none'; // Limpar feedback quando mostrar a tela de revelação
+    }, 3000);
   }
 
   goToNextLetter() {

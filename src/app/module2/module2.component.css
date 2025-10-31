@@ -8,14 +8,16 @@
   background: #f8f9fa;
   border: 4px solid #fff;
   border-radius: 20px;
-  padding: 30px;
+  padding: 20px 10px;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   aspect-ratio: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  min-height: 150px;
 }
 
 .image-option:hover {
@@ -40,10 +42,7 @@
 }
 
 .images-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  position: relative;
 }
 
 .images-container .feedback-badge {
@@ -54,39 +53,34 @@
   z-index: 100;
 }
 
-.feedback-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  z-index: 100;
+.image-option.correct-image {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border-color: #28a745;
+  animation: correctPulse 0.5s ease;
 }
 
-.correct-word-display {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+.image-option.wrong-image {
+  opacity: 0.3;
+}
+
+.word-below-image {
+  margin-top: 10px;
   color: white;
-  padding: 15px 30px;
-  border-radius: 50px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 700;
   font-family: 'Nunito', sans-serif;
-  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
-  animation: wordAppear 0.5s ease;
   text-transform: capitalize;
+  animation: wordAppear 0.5s ease;
 }
 
 @keyframes wordAppear {
   0% {
     opacity: 0;
-    transform: scale(0) translateY(20px);
+    transform: translateY(10px);
   }
   100% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: translateY(0);
   }
 }
 

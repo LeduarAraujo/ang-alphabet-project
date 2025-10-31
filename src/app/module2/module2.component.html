@@ -56,22 +56,20 @@
               <div 
                 class="image-option"
                 [class.disabled]="feedback !== 'none'"
+                [class.correct-image]="feedback === 'correct' && emoji === correctEmoji"
+                [class.wrong-image]="feedback === 'wrong' && emoji !== correctEmoji"
                 (click)="onImageClick(emoji)">
                 <div class="emoji-display">{{ emoji }}</div>
+                @if (feedback === 'correct' && emoji === correctEmoji && correctWord) {
+                  <div class="word-below-image">{{ correctWord }}</div>
+                }
               </div>
             </div>
           }
         </div>
         @if (feedback !== 'none') {
-          <div class="feedback-container">
-            <div class="feedback-badge" [ngClass]="feedback">
-              {{ feedback === 'correct' ? '✓' : '✗' }}
-            </div>
-            @if (feedback === 'correct' && correctWord) {
-              <div class="correct-word-display">
-                {{ correctWord }}
-              </div>
-            }
+          <div class="feedback-badge" [ngClass]="feedback">
+            {{ feedback === 'correct' ? '✓' : '✗' }}
           </div>
         }
       </div>
