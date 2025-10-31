@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 interface Letter {
@@ -11,25 +10,25 @@ interface Letter {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule],
+  imports: [CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   title = 'ang-alphabet-project';
-  
+
   gameStarted = false;
   currentLetter: string | null = null;
   isRecording = false;
   feedback: 'none' | 'correct' | 'wrong' = 'none';
   showReveal = false;
   revealedLetter: string | null = null;
-  
+
   alphabet: Letter[] = [];
-  
+
   private recognition: any;
   private availableLetters: string[] = [];
-  private isProcessingResult = false;
+  private lastSpokenText: string = '';
   private colors: string[] = [
     'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -52,22 +51,20 @@ export class AppComponent implements OnInit {
   }
 
   private initializeAlphabet() {
-    // Criar array com todas as letras do alfabeto
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    
+
     this.alphabet = letters.map((letter, index) => ({
       id: index,
       letter: letter,
       state: 'visible' as const
     }));
-    
+
     this.availableLetters = [...letters];
   }
 
   private initializeSpeechRecognition() {
-    // Verificar se o navegador suporta Web Speech API
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    
+
     if (!SpeechRecognition) {
       console.error('Speech Recognition não está disponível neste navegador');
       return;
@@ -77,21 +74,16 @@ export class AppComponent implements OnInit {
     this.recognition.lang = 'pt-BR';
     this.recognition.continuous = false;
     this.recognition.interimResults = false;
+    this.recognition.maxAlternatives = 10;
 
     this.recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript.toUpperCase().trim();
-      console.log('Letra falada:', transcript);
-      
-      this.handleSpeechResult(transcript);
+      const result = event.results[0];
+      this.lastSpokenText = result[0].transcript.toUpperCase().trim();
+      console.log('Palavra detectada:', this.lastSpokenText);
     };
 
     this.recognition.onerror = (event: any) => {
       console.error('Erro no reconhecimento de voz:', event.error);
-      this.isRecording = false;
-    };
-
-    this.recognition.onend = () => {
-      // Limpar estado de gravação quando terminar
       this.isRecording = false;
     };
   }
@@ -99,54 +91,186 @@ export class AppComponent implements OnInit {
   startGame() {
     this.gameStarted = true;
     this.feedback = 'none';
-    
-    // Ocultar todas as letras
     this.alphabet.forEach(letter => {
       if (letter.state !== 'correct') {
         letter.state = 'hidden';
       }
     });
-    
-    // Restaurar letras disponíveis
     this.availableLetters = this.alphabet
       .filter(letter => letter.state !== 'correct')
       .map(letter => letter.letter);
-    
-    // Mostrar primeira letra aleatória
     this.showRandomLetter();
   }
 
   startRecording() {
     if (!this.gameStarted || !this.currentLetter || this.isRecording) return;
-    
+
+    console.log('🎤 Iniciando gravação...');
     this.isRecording = true;
     this.feedback = 'none';
-    
+    this.lastSpokenText = '';
+
     if (this.recognition) {
       try {
         this.recognition.start();
       } catch (e) {
-        console.log('Reconhecimento já iniciado');
+        console.log('Recognition já está ativo');
       }
     }
   }
 
   stopRecording() {
-    this.isRecording = false;
-    
+    console.log('🛑 Parando gravação...');
+
     if (this.recognition) {
       try {
         this.recognition.stop();
       } catch (e) {
-        console.log('Reconhecimento já parado');
+        console.log('Recognition já está parado');
       }
+    }
+
+    // Aguardar um pouco pelo resultado do reconhecimento
+    setTimeout(() => {
+      if (this.lastSpokenText) {
+        this.processSpokenText(this.lastSpokenText);
+        this.lastSpokenText = '';
+      }
+      this.isRecording = false;
+    }, 300);
+  }
+
+  private processSpokenText(text: string) {
+    console.log('📝 Processando:', text);
+
+    let cleanedText = text
+      .toUpperCase()
+      .replace(/LETRA\s*/g, '')
+      .replace(/É\s*/g, '')
+      .replace(/EH\s*/g, '')
+      .replace(/A\s+(LETRA\s+)?/g, '')
+      .trim();
+
+    const words = cleanedText.split(/\s+/);
+    const letterVariations: { [key: string]: string[] } = {
+      'Á': ['A', 'AGÁ', 'AGA'],
+      'É': ['E', 'É', 'EIS'],
+      'Í': ['I'],
+      'Ó': ['O', 'Ó'],
+      'Ú': ['U', 'Ú'],
+      'C': ['CÊ', 'CE', 'SE'],
+      'F': ['ÉFE', 'EFE', 'FE'],
+      'G': ['GÊ', 'GE'],
+      'H': ['AGÁ', 'AGA', 'H'],
+      'J': ['JOTA', 'JOTA', 'GE'],
+      'K': ['CÁ', 'CA', 'K'],
+      'L': ['ÉLE', 'ELE', 'LE'],
+      'M': ['ÉME', 'EME', 'ME'],
+      'N': ['ÉNE', 'ENE', 'NE'],
+      'P': ['PÊ', 'PE'],
+      'Q': ['QUÊ', 'QUE', 'CE'],
+      'R': ['ÉRRE', 'ERRE', 'RE', 'RR'],
+      'S': ['ÉSSE', 'ESSE', 'SE', 'CÊ'],
+      'T': ['TÊ', 'TE'],
+      'V': ['VÊ', 'VE'],
+      'W': ['DÁBLIO', 'DABLIO', 'VÊ DOBRO', 'VÊ DUPLO', 'U DUPLO'],
+      'X': ['XIS', 'XIS', 'CHIS'],
+      'Y': ['ÍPSILOM', 'YPSILOM', 'I GRÉGO', 'Y'],
+      'Z': ['ZÊ', 'ZE']
+    };
+
+    const checkMatch = (word: string, letter: string): boolean => {
+      if (word === letter) return true;
+      if (word.includes(letter)) return true;
+      const variations = letterVariations[letter] || [];
+      return variations.some(v => word === v || word.includes(v));
+    };
+
+    const matched = words.some(word => checkMatch(word, this.currentLetter!));
+
+    if (matched) {
+      this.onCorrectAnswer();
+    } else {
+      this.onWrongAnswer();
+    }
+  }
+
+  private onCorrectAnswer() {
+    console.log('✅ Acertou!');
+    this.showCorrectFeedback();
+    this.markLetterAsCorrect();
+    this.removeLetterFromAvailable();
+    this.showRevealScreen();
+  }
+
+  private onWrongAnswer() {
+    console.log('❌ Errou!');
+    this.showWrongFeedback();
+  }
+
+  private showCorrectFeedback() {
+    this.feedback = 'correct';
+    setTimeout(() => this.feedback = 'none', 1000);
+  }
+
+  private showWrongFeedback() {
+    this.feedback = 'wrong';
+    setTimeout(() => this.feedback = 'none', 1000);
+  }
+
+  private markLetterAsCorrect() {
+    const letterObj = this.alphabet.find(l => l.letter === this.currentLetter);
+    if (letterObj) {
+      letterObj.state = 'correct';
+    }
+  }
+
+  private removeLetterFromAvailable() {
+    this.availableLetters = this.availableLetters.filter(l => l !== this.currentLetter);
+  }
+
+  private showRevealScreen() {
+    setTimeout(() => {
+      this.revealedLetter = this.currentLetter;
+      this.currentLetter = null;
+      this.showReveal = true;
+    }, 1000);
+  }
+
+  goToNextLetter() {
+    this.showReveal = false;
+    this.revealedLetter = null;
+    this.showRandomLetter();
+  }
+
+  private showRandomLetter() {
+    if (this.availableLetters.length === 0) {
+      this.currentLetter = null;
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * this.availableLetters.length);
+    const randomLetter = this.availableLetters[randomIndex];
+    this.currentLetter = randomLetter;
+
+    const letterObj = this.alphabet.find(l => l.letter === randomLetter);
+    if (letterObj) {
+      letterObj.state = 'visible';
     }
   }
 
   stopGame() {
     this.gameStarted = false;
     this.currentLetter = null;
-    
+    this.showReveal = false;
+    this.revealedLetter = null;
+
+    this.alphabet.forEach(letter => {
+      if (letter.state === 'hidden') {
+        letter.state = 'visible';
+      }
+    });
+
     if (this.recognition) {
       this.recognition.stop();
     }
@@ -154,95 +278,22 @@ export class AppComponent implements OnInit {
 
   resetGame() {
     this.stopGame();
-    
-    // Resetar todas as letras para visível
     this.alphabet.forEach(letter => {
       letter.state = 'visible';
     });
-    
     this.availableLetters = [];
-  }
-
-  private showRandomLetter() {
-    if (this.availableLetters.length === 0) {
-      this.currentLetter = null;
-      this.stopGame();
-      return;
-    }
-    
-    // Selecionar letra aleatória
-    const randomIndex = Math.floor(Math.random() * this.availableLetters.length);
-    const randomLetter = this.availableLetters[randomIndex];
-    
-    this.currentLetter = randomLetter;
-    
-    // Mostrar letra na tela
-    const letterObj = this.alphabet.find(l => l.letter === randomLetter);
-    if (letterObj) {
-      letterObj.state = 'visible';
-    }
-  }
-
-  private handleSpeechResult(transcript: string) {
-    if (!this.currentLetter || this.isProcessingResult) return;
-    
-    this.isProcessingResult = true;
-    
-    // Verificar se a letra falada corresponde
-    // Aceita tanto a letra isolada quanto com "letra" ou "é [letra]"
-    const cleanedTranscript = transcript.replace(/LETRA\s*/g, '').replace(/É\s*/g, '');
-    
-    if (cleanedTranscript.includes(this.currentLetter)) {
-      // Acertou!
-      this.feedback = 'correct';
-      this.revealedLetter = this.currentLetter;
-      
-      const letterObj = this.alphabet.find(l => l.letter === this.currentLetter);
-      if (letterObj) {
-        letterObj.state = 'correct';
-      }
-      
-      // Remover da lista de disponíveis
-      this.availableLetters = this.availableLetters.filter(l => l !== this.currentLetter);
-      
-      // Mostrar efeito de revelação
-      setTimeout(() => {
-        this.feedback = 'none';
-        this.currentLetter = null;
-        this.showReveal = true;
-      }, 1000);
-      
-      // Mostrar próxima letra após revelação
-      setTimeout(() => {
-        this.showReveal = false;
-        this.revealedLetter = null;
-        this.showRandomLetter();
-      }, 2500);
-    } else {
-      // Errou!
-      this.feedback = 'wrong';
-      
-      setTimeout(() => {
-        this.feedback = 'none';
-      }, 1000);
-    }
-    
-    this.isProcessingResult = false;
   }
 
   getCardColor(letter: Letter): string {
     if (letter.state === 'correct') {
       return '';
     }
-    
-    // Atribuir cores diferentes para cada letra
     return this.colors[letter.id % this.colors.length];
   }
 
   speakLetter(letter: string) {
     if (!letter) return;
-    
-    // Verificar se Speech Synthesis está disponível
+
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(letter.toUpperCase());
       utterance.lang = 'pt-BR';

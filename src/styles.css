@@ -305,3 +305,127 @@ body {
   margin-bottom: 30px;
   font-size: 2rem;
 }
+
+.floating-next-button {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(45deg, #4CAF50, #45a049);
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 50px;
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  animation: floatButton 2s ease-in-out infinite;
+}
+
+.floating-next-button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(76, 175, 80, 0.7);
+}
+
+@keyframes floatButton {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -60%);
+  }
+}
+
+.fireworks-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.firework {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, #ff6b6b, #ffd93d, #6bcf7f, #4ecdc4, #95a5a6);
+  border-radius: 50%;
+  animation: fireworkExplode 2s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fireworkExplode {
+  0% {
+    opacity: 0;
+    transform: scale(0) translate(0, 0);
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2) translate(var(--random-x, 0), var(--random-y, 0));
+  }
+}
+
+.firework:nth-child(1) {
+  top: 10%;
+  left: 20%;
+  --random-x: 30px;
+  --random-y: 30px;
+}
+
+.firework:nth-child(2) {
+  top: 30%;
+  left: 40%;
+  --random-x: -40px;
+  --random-y: 25px;
+}
+
+.firework:nth-child(3) {
+  top: 50%;
+  left: 60%;
+  --random-x: 35px;
+  --random-y: -35px;
+}
+
+.firework:nth-child(4) {
+  top: 70%;
+  left: 80%;
+  --random-x: -30px;
+  --random-y: -25px;
+}
+
+.firework:nth-child(5) {
+  top: 20%;
+  right: 15%;
+  --random-x: -25px;
+  --random-y: 40px;
+}
+
+.firework:nth-child(6) {
+  top: 40%;
+  right: 25%;
+  --random-x: 45px;
+  --random-y: -20px;
+}
+
+.firework:nth-child(7) {
+  top: 60%;
+  right: 35%;
+  --random-x: -35px;
+  --random-y: 30px;
+}
+
+.firework:nth-child(8) {
+  top: 80%;
+  right: 45%;
+  --random-x: 25px;
+  --random-y: -45px;
+}
