@@ -1,0 +1,25 @@
+.navbar-brand h4 {
+  color: #6366f1;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+}
+
+.nav-link {
+  font-weight: 600;
+  font-family: 'Nunito', sans-serif;
+  color: #64748b !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #f1f5f9;
+  color: #6366f1 !important;
+}
+
+.nav-link.active {
+  background-color: #6366f1;
+  color: #ffffff !important;
+}
+

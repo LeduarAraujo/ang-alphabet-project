@@ -1,0 +1,134 @@
+<div class="container main-container" [class.game-mode]="gameStarted">
+  <h1 class="title">🖼️ Aprenda com Imagens</h1>
+  
+  @if (!gameStarted) {
+    <!-- Tela inicial -->
+    <div class="status-text">
+      <p>Clique no botão <strong>Iniciar</strong> para começar a jogar!</p>
+      <small class="text-muted">📌 Clique na imagem que começa com a letra exibida</small>
+    </div>
+
+    <div class="row g-3 mb-4">
+      @for (letter of alphabet; track letter.id) {
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2">
+          <div 
+            class="card card-letter"
+            [ngClass]="{
+              'hidden': letter.state === 'hidden',
+              'correct': letter.state === 'correct'
+            }"
+            [style.background]="getCardColor(letter)"
+            (click)="speakLetter(letter.letter)">
+            <div class="card-body letter-forms">
+              <div class="letter-form letter-uppercase-print">{{ letter.letter }}</div>
+              <div class="letter-form letter-lowercase-print">{{ letter.letter }}</div>
+              <div class="letter-form letter-uppercase-cursive">{{ letter.letter }}</div>
+              <div class="letter-form letter-lowercase-cursive">{{ letter.letter }}</div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="text-center">
+      <button class="btn btn-primary btn-custom btn-start" (click)="startGame()">
+        🚀 Iniciar
+      </button>
+    </div>
+  }
+
+  @if (gameStarted && currentLetter) {
+    <!-- Modo jogo -->
+    <div class="game-screen">
+      <div class="current-letter-card">
+        <div class="letter-forms">
+          <div class="letter-form letter-uppercase-print">{{ currentLetter }}</div>
+          <div class="letter-form letter-lowercase-print">{{ currentLetter }}</div>
+          <div class="letter-form letter-uppercase-cursive">{{ currentLetter }}</div>
+          <div class="letter-form letter-lowercase-cursive">{{ currentLetter }}</div>
+        </div>
+      </div>
+
+      <div class="images-container">
+        <div class="row g-3">
+          @for (emoji of currentImageOptions; track emoji) {
+            <div class="col-4">
+              <div 
+                class="image-option"
+                [class.disabled]="feedback !== 'none'"
+                (click)="onImageClick(emoji)">
+                <div class="emoji-display">{{ emoji }}</div>
+              </div>
+            </div>
+          }
+        </div>
+        @if (feedback !== 'none') {
+          <div class="feedback-badge" [ngClass]="feedback">
+            {{ feedback === 'correct' ? '✓' : '✗' }}
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="game-actions">
+      <button class="btn btn-secondary btn-small" (click)="stopGame()">
+        ⏸️ Parar
+      </button>
+    </div>
+  }
+
+  @if (gameStarted && showReveal && revealedLetter) {
+    <!-- Efeito de revelação na tela inicial -->
+    <div class="status-text">
+      <p>🎉 Parabéns! Você acertou!</p>
+    </div>
+
+    <div class="row g-3 mb-4">
+      @for (letter of alphabet; track letter.id) {
+        <div class="col-6 col-md-4 col-lg-3 col-xl-2 position-relative">
+          <div 
+            class="card card-letter"
+            [ngClass]="{
+              'hidden': letter.state === 'hidden',
+              'correct': letter.state === 'correct',
+              'revealing': revealedLetter === letter.letter && letter.state === 'correct'
+            }"
+            [style.background]="getCardColor(letter)">
+            <div class="card-body letter-forms">
+              <div class="letter-form letter-uppercase-print">{{ letter.letter }}</div>
+              <div class="letter-form letter-lowercase-print">{{ letter.letter }}</div>
+              <div class="letter-form letter-uppercase-cursive">{{ letter.letter }}</div>
+              <div class="letter-form letter-lowercase-cursive">{{ letter.letter }}</div>
+            </div>
+          </div>
+          @if (revealedLetter === letter.letter && letter.state === 'correct') {
+            <div class="fireworks-container">
+              <div class="firework" style="left: 20%; animation-delay: 0s;"></div>
+              <div class="firework" style="left: 40%; animation-delay: 0.2s;"></div>
+              <div class="firework" style="left: 60%; animation-delay: 0.4s;"></div>
+              <div class="firework" style="left: 80%; animation-delay: 0.6s;"></div>
+              <div class="firework" style="top: 20%; animation-delay: 0.3s;"></div>
+              <div class="firework" style="top: 40%; animation-delay: 0.5s;"></div>
+              <div class="firework" style="top: 60%; animation-delay: 0.7s;"></div>
+              <div class="firework" style="top: 80%; animation-delay: 0.9s;"></div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <button class="floating-next-button" (click)="goToNextLetter()">
+      Próxima →
+    </button>
+  }
+
+  @if (gameStarted && !currentLetter && !showReveal) {
+    <!-- Parabéns -->
+    <div class="congratulations">
+      <h2>🎉 Parabéns! Você completou todas as letras!</h2>
+      <button class="btn btn-success btn-custom" (click)="resetGame()">
+        🔄 Jogar Novamente
+      </button>
+    </div>
+  }
+</div>
