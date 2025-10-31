@@ -24,7 +24,7 @@
 .modal-content {
   background: white;
   border-radius: 20px;
-  max-width: 600px;
+  max-width: 500px;
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
@@ -46,7 +46,7 @@
 .modal-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 30px;
+  padding: 15px;
   border-radius: 20px 20px 0 0;
   display: flex;
   justify-content: space-between;
@@ -55,7 +55,7 @@
 
 .modal-header h2 {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.3rem;
   font-weight: 700;
   font-family: 'Nunito', sans-serif;
 }
@@ -83,12 +83,12 @@
 }
 
 .modal-body {
-  padding: 30px;
+  padding: 15px;
 }
 
 .instruction-section {
-  margin-bottom: 30px;
-  padding: 25px;
+  margin-bottom: 15px;
+  padding: 12px;
   background: #f8f9fa;
   border-radius: 15px;
   border-left: 5px solid #667eea;
@@ -96,19 +96,20 @@
 
 .instruction-section h3 {
   color: #667eea;
-  font-size: 1.5rem;
-  margin-bottom: 15px;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
   font-weight: 700;
   font-family: 'Nunito', sans-serif;
 }
 
 .instruction-text {
   color: #333;
-  line-height: 1.8;
+  line-height: 1.5;
+  font-size: 0.9rem;
 }
 
 .instruction-text p {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   font-weight: 600;
 }
 
@@ -118,7 +119,7 @@
 }
 
 .instruction-text li {
-  margin-bottom: 8px;
+  margin-bottom: 3px;
 }
 
 .highlight {
@@ -132,18 +133,18 @@
 .tips-section {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
   color: white;
-  padding: 20px;
+  padding: 12px;
   border-radius: 15px;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .tip {
   margin: 0;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
 }
 
 .modal-footer {
-  padding: 20px 30px;
+  padding: 15px 20px;
   border-radius: 0 0 20px 20px;
   background: #f8f9fa;
   text-align: center;
@@ -153,8 +154,8 @@
   background: linear-gradient(45deg, #4CAF50, #45a049);
   color: white;
   border: none;
-  padding: 15px 40px;
-  font-size: 1.2rem;
+  padding: 12px 30px;
+  font-size: 1rem;
   font-weight: 700;
   border-radius: 50px;
   cursor: pointer;
